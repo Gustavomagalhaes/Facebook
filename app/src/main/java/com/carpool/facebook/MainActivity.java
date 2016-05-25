@@ -26,24 +26,21 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
-    LoginButton mButtonLogin;
+    LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+        setContentView(R.layout.activity_main);
         printKeyHash();
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_main);
-
-        AppEventsLogger.activateApp(this);
-
         callbackManager = CallbackManager.Factory.create();
-        mButtonLogin = (LoginButton) findViewById(R.id.login_button);
-        mButtonLogin.setReadPermissions(Arrays.asList("public_profile", "email"));
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
 
-        mButtonLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 AccessToken accessToken = loginResult.getAccessToken();
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(MainActivity.this.getApplicationContext(), "Login Cancelado pelo usuario!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(), "Login Cancelado pelo usuário!", Toast.LENGTH_LONG).show();
             }
 
             @Override
