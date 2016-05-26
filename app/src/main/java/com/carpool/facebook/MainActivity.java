@@ -14,6 +14,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -45,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
 
                 AccessToken accessToken = loginResult.getAccessToken();
-                getFacebookData(accessToken);
+                Profile profile = Profile.getCurrentProfile();
+                getFacebookData(accessToken, profile);
                 Toast.makeText(MainActivity.this.getApplicationContext(), "Sucesso ao Logar!", Toast.LENGTH_LONG).show();
             }
 
@@ -84,13 +89,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getFacebookData(AccessToken accessToken) {
+    public void getFacebookData(AccessToken accessToken, Profile profile) {
         System.out.println("---------------------");
-        System.out.println("---------------------Facebook Login Successful!");
-        System.out.println("---------------------Logged in user Details : ");
+        System.out.println("--Facebook Login Successful!");
+        System.out.println("--Logged in user Details : ");
         System.out.println("---------------------");
-        System.out.println("---------------------User ID : " + accessToken.getUserId());
-        System.out.println("---------------------Authentication Token : " + accessToken.getToken());
+        System.out.println("--User ID : " + accessToken.getUserId());
+        System.out.println("--Authentication Token : " + accessToken.getToken());
         System.out.println("---------------------");
+        System.out.println("---------------------First Name : " + profile.getFirstName());
+        System.out.println("---------------------Last Name : " + profile.getLastName());
+        System.out.println("---------------------Middle Name : " + profile.getMiddleName());
+        System.out.println("---------------------URL : " + profile.getLinkUri());
+
+        profile.getProfilePictureUri(500,500);
+
+//        /* make the API call */
+//        new GraphRequest(
+//                accessToken,
+//                "/{user-id}",
+//                null,
+//                HttpMethod.GET,
+//                new GraphRequest.Callback() {
+//                    public void onCompleted(GraphResponse response) {
+//            /* handle the result */
+//                    }
+//                }
+//        ).executeAsync();
     }
 }
