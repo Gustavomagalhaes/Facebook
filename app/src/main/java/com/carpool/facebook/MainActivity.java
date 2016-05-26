@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -22,6 +28,12 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -89,6 +101,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    public Drawable LoadImageFromURL(String url) {
+//        System.out.println("------TESTE URL " + url);
+//        try {
+//            InputStream is = (InputStream) new URL(url).getContent();
+//            Drawable image = Drawable.createFromStream(is, "");
+//            return image;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
+
+    private Bitmap getBitmapFromURL(String url) {
+        try {
+            URL src = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) src.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void getFacebookData(AccessToken accessToken, Profile profile) {
         System.out.println("---------------------");
         System.out.println("--Facebook Login Successful!");
@@ -97,24 +135,32 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("--User ID : " + accessToken.getUserId());
         System.out.println("--Authentication Token : " + accessToken.getToken());
         System.out.println("---------------------");
-        System.out.println("---------------------First Name : " + profile.getFirstName());
-        System.out.println("---------------------Last Name : " + profile.getLastName());
-        System.out.println("---------------------Middle Name : " + profile.getMiddleName());
-        System.out.println("---------------------URL : " + profile.getLinkUri());
+        System.out.println("--First Name : " + profile.getFirstName());
+        System.out.println("--Last Name : " + profile.getLastName());
+        System.out.println("--URL Perfil: " + profile.getLinkUri());
+        System.out.println("--URL Imagem: " + profile.getProfilePictureUri(500, 500));
+        System.out.println("---------------------");
+        System.out.println("--ID : " + profile.getId());
+        System.out.println("--Name : " + profile.getName());
+        System.out.println("---------------------");
 
-        profile.getProfilePictureUri(500,500);
+        TextView profile_name = (TextView)findViewById(R.id.profile);
+        profile_name.setText(profile.getName());
 
-//        /* make the API call */
-//        new GraphRequest(
-//                accessToken,
-//                "/{user-id}",
-//                null,
-//                HttpMethod.GET,
-//                new GraphRequest.Callback() {
-//                    public void onCompleted(GraphResponse response) {
-//            /* handle the result */
-//                    }
-//                }
-//        ).executeAsync();
+//        ImageView profile_picture = (ImageView)findViewById(R.id.image);
+//
+//        profile_picture.setVisibility(ImageView.VISIBLE);
+
+//        profile_picture.setImageDrawable(LoadImageFromURL(profile.getProfilePictureUri(100, 100).toString()));
+
+//        profile_picture.setImageURI(profile.getProfilePictureUri(100, 100));
+
+//        if (profile_picture != null) {
+//            System.out.println("IMAGEM SETADA");
+//
+//            Bitmap picture = getImageBitmap(profile.getProfilePictureUri(100, 100).toString());
+//            profile_picture.setImageBitmap(picture);
+//        }
+
     }
 }
