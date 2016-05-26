@@ -43,14 +43,9 @@ public class MainActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
                 AccessToken accessToken = loginResult.getAccessToken();
-                System.out.println("---------------------");
-                System.out.println("---------------------Facebook Login Successful!");
-                System.out.println("---------------------Logged in user Details : ");
-                System.out.println("---------------------");
-                System.out.println("---------------------User ID : " + accessToken.getUserId());
-                System.out.println("---------------------Authentication Token : " + accessToken.getToken());
-                System.out.println("---------------------");
+                getFacebookData(accessToken);
                 Toast.makeText(MainActivity.this.getApplicationContext(), "Sucesso ao Logar!", Toast.LENGTH_LONG).show();
             }
 
@@ -87,5 +82,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
 
         }
+    }
+
+    public void getFacebookData(AccessToken accessToken) {
+        System.out.println("---------------------");
+        System.out.println("---------------------Facebook Login Successful!");
+        System.out.println("---------------------Logged in user Details : ");
+        System.out.println("---------------------");
+        System.out.println("---------------------User ID : " + accessToken.getUserId());
+        System.out.println("---------------------Authentication Token : " + accessToken.getToken());
+        System.out.println("---------------------");
     }
 }
