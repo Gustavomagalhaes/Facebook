@@ -41,4 +41,11 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"/>
 
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/networkImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="#000000"/>
+
 </LinearLayout>
